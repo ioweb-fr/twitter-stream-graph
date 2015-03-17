@@ -1,0 +1,29 @@
+{
+  "name": "twitter-stream-graph",
+  "version": "0.1.0",
+  "description": "Live twitter search trends graph with d3js",
+  "main": "app.js",
+  "dependencies": {
+    "twitter": "~1.2.4",
+    "express": "~4.12.2",
+    "express-cors": "~0.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ioweb-fr/twitter-stream-graph.git"
+  },
+  "keywords": [
+    "twitter",
+    "dataviz"
+  ],
+  "author": "Adrien Plagnol",
+  "license": "MIT Licence",
+  "bugs": {
+    "url": "https://github.com/ioweb-fr/twitter-stream-graph/issues"
+  },
+  "homepage": "https://github.com/ioweb-fr/twitter-stream-graph"
+}

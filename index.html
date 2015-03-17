@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Streamgraph</title>
+<style>
+
+    body {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 400;
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+
+    button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    h2 {
+        color: #55ACEE;
+        text-align: center;
+        font-size: 4rem;
+        font-variant: small-caps;
+    }
+
+    #stream {
+
+    }
+
+</style>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+<script>
+
+    var n = 5;
+    m = 100;
+    var width = $(window).width();
+    var height = $(window).height() / 3;
+    var stack = d3.layout.stack().offset("wiggle").values(function(d){return d.values;});
+    var layers0, layers1, area, x, y;
+
+    getData(init);
+
+    function init() {
+        area = d3.svg.area()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y0(function (d) {
+                    return y(d.y0);
+                })
+                .y1(function (d) {
+                    return y(d.y0 + d.y);
+                });
+
+        x = d3.scale.linear()
+                .domain([0, m - 1])
+                .range([0, width]);
+
+        y = d3.scale.linear()
+                .domain([0, d3.max(layers0.concat(layers1), function (layer) {
+                    return d3.max(layer.values, function (d) {
+                        return d.y0 + d.y;
+                    });
+                })])
+                .range([height, 0]);
+
+        var color = d3.scale.linear()
+                .range(["#55ACEE", "#ccd6dd"]);
+
+        var svg = d3.select("#stream").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+        svg.selectAll("path")
+                .data(layers0)
+                .enter().append("path")
+                .attr("d", function(d) {return area(d.values)})
+                .style("fill", function () {
+                    return color(Math.random());
+                })
+                .on("mouseover", function (d, i) {
+                    d3.select(this).style("opacity", 0.8);
+                    d3.select("#tooltip").html("<h2>" + d.name + "</h2>").style("visibility", "visible");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(this).style("opacity", 1);
+                    d3.select("#tooltip").html("").style("visibility", "hidden");
+                });
+        window.setInterval(function () {
+            getData(onTick)
+        }, 2000);
+    }
+
+    function onTick() {
+        y = d3.scale.linear()
+                .domain([0, d3.max(layers0.concat(layers1), function (layer) {
+                    return d3.max(layer.values, function (d) {
+                        return d.y0 + d.y;
+                    });
+                })])
+                .range([height, 0]);
+        transition();
+    }
+
+    function getData(cb) {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:3000/streamdata',
+            // type of data we are expecting in return:
+            dataType: 'json',
+            timeout: 300,
+            success: function (data) {
+                layers0 = stack(data);
+                layers1 = stack(data);
+                cb()
+            },
+            error: function (xhr, type) {
+                console.log('Could not get data !');
+            }
+        });
+    }
+
+    function transition() {
+        d3.selectAll("path")
+                .data(function () {
+                    var d = layers1;
+                    layers1 = layers0;
+                    return layers0 = d;
+                })
+                .transition()
+                .ease("linear")
+                .duration(4000)
+                .attr("d", function(d) {return area(d.values)})
+    }
+</script>
+
+<div id="stream"></div>
+<div id="tooltip"></div>
