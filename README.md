@@ -2,7 +2,7 @@
 Visualise twitter trends over-time for a set of search terms
 
 ## Demo
-Coming soon ...
+[http://ioweb-fr.github.io/twitter-stream-graph](http://ioweb-fr.github.io/twitter-stream-graph/)
 
 ## Usage
 - npm install
