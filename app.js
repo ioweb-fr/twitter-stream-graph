@@ -9,7 +9,7 @@ var client = new Twitter({
     access_token_secret: ''
 });
 
-var keywords = 'lolcat,kitten,#cute,pony,twitter';
+var keywords = 'hpc,machine learning,iot,big data,visualization,docker,opencl';
 var kwArr = keywords.split(',');
 var layerCount = kwArr.length;
 var counters = {};
