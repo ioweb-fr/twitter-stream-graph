@@ -120,6 +120,7 @@
                 .on("mouseover", function (d, i) {
                     d3.select(this).style("opacity", 0.8);
                     d3.select("#tooltip").html("<h2>" + d.name + "</h2>").style("visibility", "visible");
+                    d3.select(".twitter-tweet").style({"visibility": "visible"});
                 })
                 .on("mouseout", function(d, i) {
                     d3.select(this).style("opacity", 1);
