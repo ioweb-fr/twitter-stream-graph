@@ -24,8 +24,31 @@
         font-variant: small-caps;
     }
 
-    #stream {
+    blockquote.twitter-tweet {
+        position: absolute;
+        display: inline-block;
+        padding: 16px;
+        margin: 10px 0;
+        max-width: 468px;
+        border: #ddd 1px solid;
+        border-top-color: #eee;
+        border-bottom-color: #bbb;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        font: bold 14px/18px Helvetica, Arial, sans-serif;
+        background-color: #fff;
+        color: #000;
+    }
 
+    blockquote.twitter-tweet p {
+        font: normal 18px/24px Georgia, "Times New Roman", Palatino, serif;
+        margin: 0 5px 10px 0;
+    }
+
+    blockquote.twitter-tweet a[href^="https://twitter.com"] {
+        font-weight: normal;
+        color: #666;
+        font-size: 12px;
     }
 
 </style>
@@ -81,6 +104,18 @@
                 .style("fill", function () {
                     return color(Math.random());
                 })
+                .on("mousemove", function(d, i) {
+                    var mousex = d3.mouse(this);
+                    mousex = mousex[0];
+                    var invertedx = Math.floor(x.invert(mousex));
+                    var tweet = d.values[invertedx].tweet;
+                    if (tweet.length > 0) {
+                        console.log(tweet);
+                        d3.select("#tweet").html(tweet);
+                        d3.select(".twitter-tweet").style({"bottom": "0", "left": mousex+"px"});
+
+                    }
+                })
                 .on("mouseover", function (d, i) {
                     d3.select(this).style("opacity", 0.8);
                     d3.select("#tooltip").html("<h2>" + d.name + "</h2>").style("visibility", "visible");
@@ -108,7 +143,7 @@
     function getData(cb) {
         $.ajax({
             type: 'GET',
-            url: 'http://twitter-streamgraph.ioweb.fr:3000/streamdata',
+            url: 'http://localhost:3000/streamdata',
             // type of data we are expecting in return:
             dataType: 'json',
             timeout: 300,
@@ -139,3 +174,6 @@
 
 <div id="stream"></div>
 <div id="tooltip"></div>
+<blockquote class="twitter-tweet">
+    <p id="tweet"></p>
+</blockquote>
