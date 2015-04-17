@@ -1,0 +1,95 @@
+<polymer-element name="io-sign">
+    <template>
+        <style>
+            #ioweb-signature {
+                position: fixed;
+                bottom: 20px;
+                right: 0;
+                display: block;
+                padding: 20px;
+                width: 600px;
+                height: 85px;
+                text-align: right;
+            }
+
+            #ioweb-signature a {
+                display: inline-block;
+            }
+
+            .io-sign-layer {
+                display: inline-block;
+                width: 64px;
+                height: 64px;
+                position: relative;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+                border-radius: 64px;
+                z-index: 0;
+                right: 0;
+                transition: right 0.2s, transform 1s;
+                margin-right: 10px;
+            }
+
+            .io-sign-layer-0 {
+                right: -192px;
+                transform: rotate(360deg);
+            }
+
+            .io-sign-layer-1 {
+                right: -128px;
+                z-index: -1;
+            }
+
+            .io-sign-layer-2 {
+                right: -64px;
+                z-index: -2;
+            }
+
+            .io-sign-layer-3 {
+                right: 0;
+                z-index: -3;
+            }
+
+            .io-sign-layer-0.unlayered {
+                right: 0 !important;
+                transform: rotate(0deg);
+            }
+
+            .unlayered {
+                right: 0 !important;
+            }
+        </style>
+        <span id="ioweb-signature">
+            <a href="http://www.ioweb.fr"><img src="./images/logo-mini-ioweb-64x64-smaller.gif" class="io-sign-layer io-sign-layer-0"></a>
+            <a href="https://twitter.com/adrienplagnol"><img src="./images/apl-64x64.gif" class="io-sign-layer io-sign-layer-1"></a>
+            <a href="https://twitter.com/fredericlb"><img src="./images/flb-64x64.gif" class="io-sign-layer io-sign-layer-2"></a>
+            <a href="https://twitter.com/yannismazzer"><img src="./images/ymz-64x64.gif" class="io-sign-layer io-sign-layer-3"></a>
+        </span>
+    </template>
+    <script>
+        Polymer('io-sign', {
+            ready: function() {
+                var sign = this.$['ioweb-signature'];
+                var over = false;
+                var self = this;
+                sign.addEventListener("mouseover", function (e) {
+                    over = true;
+                    var children = self.shadowRoot.querySelectorAll("#ioweb-signature .io-sign-layer");
+                    for(var i = 0; i<children.length; i++) {
+                        children[i].classList.add("unlayered");
+                    }
+                });
+                sign.addEventListener("mouseout", function(e) {
+                    over = false;
+                    setTimeout(function() {
+                        if(!over) {
+                            var children = self.shadowRoot.querySelectorAll("#ioweb-signature .io-sign-layer");
+                            for (var i = 0; i < children.length; i++) {
+                                children[i].classList.remove("unlayered");
+                            }
+                        }
+                    }, 1000);
+                });
+            }
+        });
+    </script>
+</polymer-element>

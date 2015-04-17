@@ -53,6 +53,8 @@
 
 </style>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
+<script src="polymer.min.js"></script>
+<link rel="import" href="ioweb-signature.html">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
 <script>
@@ -174,7 +176,7 @@
                 .attr("d", function(d) {return area(d.values)})
     }
 </script>
-
+<io-sign></io-sign>
 <div id="stream"></div>
 <div id="tooltip"></div>
 <blockquote class="twitter-tweet">
